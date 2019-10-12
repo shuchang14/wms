@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+ <SqlQueryEntity>
+     <sql>
+         <![CDATA[
+             SELECT
+                u.*,
+                ur.role_uuid,
+                r.role_name
+            FROM
+                user_table u
+                LEFT JOIN user_role ur ON u.user_uuid = ur.user_uuid
+                LEFT JOIN role_table r ON ur.role_uuid = r.role_uuid
+            WHERE 1=1
+                <<and u.user_code=:userCode>>
+                <<and u.user_name=:userName>>
+                <<and u.role_uuid=:roleUuid>>
+                <<and u.creat_time BETWEEN :startDate and :endDate>>
+           ]]>
+
+     </sql>  
+ </SqlQueryEntity>
+ 

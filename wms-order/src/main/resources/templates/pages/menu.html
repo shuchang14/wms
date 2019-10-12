@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>菜单管理</title>
+    <link rel="stylesheet" href="./layui/css/layui.css"  media="all">
+    <script type="text/javascript" src="./layui/layui.js"></script>
+    <style>
+
+    </style>
+</head>
+<body>
+   <div class="layui-container" style="width: 100%;margin-top: 10px;" ng-controller="container">
+        <div class="layui-row query-input">
+            <form class="layui-form" id="query_form">
+            <div class="layui-form-item">
+                <div class="layui-inline" style="width: 250px;">
+                    <label class="layui-form-label">菜单代码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="menuCode" placeholder="菜单代码" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline" style="width: 250px;">
+                    <label class="layui-form-label">菜单名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="menuName" placeholder="菜单名称" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline" style="width: 250px;">
+                    <label class="layui-form-label">服务</label>
+                    <div class="layui-input-block">
+                        <select name="service">
+                            <option value=""></option>
+                            <option value="127.0.0.1:8083/wms">基础信息</option>
+                            <option value="127.0.0.1:8082/wms">订单管理</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline" style="width: 250px;">
+                    <label class="layui-form-label">创建时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" name="queryDate" id="queryDate">
+                    </div>
+                </div>
+
+            </div>
+                <div class="layui-form-item" style="padding-left: 15px;">
+
+                    <button class="layui-btn layui-btn-sm" lay-submit lay-filter="queryMenu">查询</button>
+                    <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">重置</button>
+
+                </div>
+            </form>
+        </div>
+        <div class="layui-row">
+             <table class="layui-hide" id="menuTable" lay-filter="menuTable"></table>
+        </div>
+   </div>
+   <form class="layui-form" id="addForm" lay-filter="addForm" style="display: none">
+       <br>
+       <div class="layui-form-item">
+           <input type="hidden" name="menuUuid">
+           <label class="layui-form-label">菜单类型</label>
+           <div class="layui-input-block">
+               <input type="radio" name="type" value="group" title="菜单组">
+               <input type="radio" name="type" value="menu" title="菜单" checked>
+               <input type="radio" name="type" value="butten" title="按钮">
+           </div>
+       </div>
+       <div class="layui-form-item">
+           <div class="layui-inline">
+           <label class="layui-form-label">菜单组</label>
+           <div class="layui-input-block" style="width: 240px;">
+               <select name="preMenuUuid" lay-search id="group">
+                   <option value=""></option>
+               </select>
+           </div>
+           </div>
+           <div class="layui-inline">
+               <label class="layui-form-label">服务</label>
+               <div class="layui-input-block" style="width: 240px;">
+                   <select name="service">
+                       <option value=""></option>
+                       <option value="127.0.0.1:8083/wms">基础信息</option>
+                       <option value="127.0.0.1:8082/wms">订单管理</option>
+                   </select>
+               </div>
+           </div>
+       </div>
+       <div class="layui-form-item">
+           <div class="layui-inline">
+               <label class="layui-form-label">菜单代码</label>
+               <div class="layui-input-block" style="width: 240px;">
+                   <input type="text" name="menuCode" placeholder="请输入" autocomplete="off" class="layui-input">
+               </div>
+           </div>
+           <div class="layui-inline">
+               <label class="layui-form-label">菜单名称</label>
+               <div class="layui-input-block" style="width: 240px;">
+                   <input type="text" name="menuName" placeholder="请输入" autocomplete="off" class="layui-input">
+               </div>
+           </div>
+       </div>
+       <div class="layui-form-item">
+           <div class="layui-inline">
+               <label class="layui-form-label">url</label>
+               <div class="layui-input-block" style="width: 240px;">
+                   <input type="text" name="url" placeholder="请输入" autocomplete="off" class="layui-input">
+               </div>
+           </div>
+           <div class="layui-inline">
+               <label class="layui-form-label">序号</label>
+               <div class="layui-input-block" style="width: 240px;">
+                   <input type="text" name="num" placeholder="请输入" autocomplete="off" class="layui-input">
+               </div>
+           </div>
+       </div>
+       <div class="layui-form-item">
+           <div class="layui-input-block">
+               <button class="layui-btn" lay-submit lay-filter="saveMenu">保存</button>
+               <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+           </div>
+       </div>
+   </form>
+</body>
+</html>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="addMenu">新增</button>
+        <button class="layui-btn layui-btn-sm" lay-event="editMenu">编辑</button>
+        <button class="layui-btn layui-btn-sm" lay-event="deleteMenu">删除</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+    </div>
+</script>
+
+<script>
+    layui.config({
+        base: './js/'
+        ,version: '101100'
+    }).extend({ //设定模块别名
+        common: 'common'
+    });
+    layui.use(['table','form','jquery','laydate','common'], function(){
+        var table = layui.table;
+        var form = layui.form;
+        var $ = layui.jquery;
+        var common=layui.common;
+        var laydate=layui.laydate;
+        laydate.render({
+            elem: '#queryDate'
+            ,range: '~' //或 range: '~' 来自定义分割字符
+        });
+        var groups=new Array();
+        $.get('/wms/menu/getMenus?type=GROUP',function (data) {
+            $.each(data, function (index, item) {
+                var obj=new Object()
+                obj.menuUuid=item.menuUuid;
+                obj.menuName=item.menuName;
+                groups.push(obj);
+                $('#group').append(new Option(item.menuName, item.menuUuid));// 下拉菜单里添加元素
+            });
+            form.render('select');
+        });
+        var addOpenIndex=null;
+        var menuTable = table.render({
+            elem: '#menuTable'
+            ,url:'/wms/menu/menuList/'
+          //  ,height:312
+            ,toolbar:'#toolbarDemo'
+            ,page:true
+            ,cols: [
+                [
+                {type: 'checkbox', fixed: 'left'}
+                ,{field: 'type', title: 'type', width:80}
+                ,{field: 'preMenuUuid', title: 'group', width:150,templet:groupTemplet}
+                ,{field: 'menuCode', title: 'menuCode', width:150}
+                ,{field: 'menuName', title: 'menuName', width:150,sort: true}
+                ,{field: 'service', title: 'service',width:330}
+                ,{field: 'url', title: 'url'}
+                ,{field: 'num', title: 'num', width: 80, sort: true}
+                ]
+            ]
+        });
+        function groupTemplet(data){
+            if(data){
+                if(data.preMenuUuid){
+                    var name=data.preMenuUuid;
+                    $.each(groups, function (index, item) {
+                        if(data.preMenuUuid==item.menuUuid){
+                             name=item.menuName;
+                             return false;
+                        }
+                    });
+                    return name;
+                }
+            }
+            return "";
+        }
+        //头工具栏事件
+        table.on('toolbar(menuTable)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'addMenu':
+                    document.getElementById("addForm").reset();
+                    addOpenIndex =layer.open({
+                        type: 1,
+                        title:'新增',
+                        area: ['60%', '400px'],
+                        shadeClose:true,
+                        content: $('#addForm') //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+                    });
+                    break;
+                case 'editMenu':
+                    // var data = checkStatus.data;
+                    // layer.alert(JSON.stringify(data));
+                    var data = checkStatus.data;
+                    if(data.length==1) {
+                        form.val("addForm", data[0]);
+                        addOpenIndex = layer.open({
+                            type: 1,
+                            title: '新增',
+                            area: ['60%', '400px'],
+                            shadeClose: true,
+                            content: $('#addForm') //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+                        });
+                    }else{
+                        layer.alert("请选择一条数据进行编辑！");
+                    }
+                    break;
+                case 'deleteMenu':
+                   // if()
+                    var data = checkStatus.data;
+                    if(data.length>0){
+                        var ids=new Array();
+                        $.each(data,function(index,obj){
+                            ids.push(obj.menuUuid);
+                        });
+                       /* $.post('/wms/menu/delete',{menuUuids:JSON.stringify(ids)},function (data) {
+
+                        });*/
+                        $.ajax({
+                            //请求方式
+                            type:'POST',
+                            //发送请求的地址
+                            url:'/wms/menu/delete',
+                            //服务器返回的数据类型
+                            dataType:'json',
+                            //发送到服务器的数据，对象必须为key/value的格式，jquery会自动转换为字符串格式
+                            data:{menuUuids:JSON.stringify(ids)},
+                            success:function(data){
+                                //请求成功函数内容
+                                form.on('submit(queryMenu)', function(data){
+                                    console.log(data);
+                                    menuTable.reload({
+                                        where: {condition:JSON.stringify(data.field)}
+                                        ,page: {
+                                            curr: 1 //重新从第 1 页开始
+                                        }
+                                    });
+                                    return false;
+                                });
+                            },
+                            error:function(jqXHR){
+                                //请求失败函数内容
+                            }
+                        });
+                    }
+                    break;
+                case 'isAll':
+                    var d = new Object();
+                    var t = $('#query_form').serializeArray()[0];
+                    alert(JSON.stringify(t));
+                    $.each(t, function() {
+                        d[this.name] = this.value;
+                    });
+                    alert(JSON.stringify(d));
+                  //  layer.msg(checkStatus.isAll ? '全选': '未全选');
+                    break;
+            };
+        });
+        form.on('submit(saveMenu)', function(data){
+            console.log(data);
+            $.ajax({
+                //请求方式
+                type:'POST',
+                //发送请求的地址
+                url:'/wms/menu/save',
+                //服务器返回的数据类型
+                dataType:'json',
+                //发送到服务器的数据，对象必须为key/value的格式，jquery会自动转换为字符串格式
+                data:{menu:JSON.stringify(data.field)},
+                success:function(data){
+                    //请求成功函数内容
+                },
+                error:function(jqXHR){
+                    //请求失败函数内容
+                }
+            });
+            layer.close(addOpenIndex);
+            layer.msg('保存成功');
+            var queryform =common.formData('#query_form'); //$('#query_form').serializeArray()[0];
+            console.log(queryform);
+            menuTable.reload({
+                where: {condition:JSON.stringify(queryform)}
+                ,page: {
+                    curr: menuTable.config.page.curr //重新从第 1 页开始
+                }
+            });
+            return false;
+        });
+        form.on('submit(queryMenu)', function(data){
+            console.log(data);
+            menuTable.reload({
+                where: {condition:JSON.stringify(data.field)}
+                ,page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+            return false;
+        });
+    });
+</script>

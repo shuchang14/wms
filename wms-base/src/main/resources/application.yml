@@ -1,0 +1,51 @@
+server:
+  port: 8086
+logging:
+  file: mylog.log
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/wms?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Hongkong
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+    tomcat:
+      max-active: 20
+      initial-size: 2
+      max-wait: 60000
+      min-idle: 1
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: select 'x'
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: true
+        show_sql: true
+        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+        generate_statistics: true
+        cache:
+          use_second_level_cache: true
+          use_query_cache: true
+          provider_configuration_file_resource_path: classpath:ehcache.xml
+          region:
+            factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+  cache:
+    ehcache:
+      config: ehcache.xml
+ # application:
+  #  name: wms-base
+#eureka:
+ # client:
+ #   service-url:
+ #     defaultZone: http://localhost:8081/eureka

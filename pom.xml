@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <properties>
+        <!--配置属性值-->
+        <java.version>1.8</java.version>
+        <version>1.0-SNAPSHOT</version><!--全局配置项目版本号-->
+    </properties>
+    <groupId>com.shu</groupId>
+    <artifactId>wms</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>wms-code</module>
+        <module>wms-base</module>
+        <module>wms-order</module>
+    </modules>
+    <parent><!--根模块继承springboot 让所有的子模块都继承springboot-->
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.5.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <!--版本控制-->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.shu</groupId>
+                <artifactId>wms-code</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.shu</groupId>
+                <artifactId>wms-base</artifactId>
+                <version>${version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

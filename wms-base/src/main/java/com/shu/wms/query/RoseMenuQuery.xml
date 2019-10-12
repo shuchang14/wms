@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+ <SqlQueryEntity>
+     <sql>
+         <![CDATA[
+             SELECT m.menu_Name,
+             m.url,
+             m.icon_Url AS iconUrl,
+             (SELECT menu_Name from menu_table WHERE menu_Uuid=m.pre_Menu_Uuid ) as preMenuName,
+             r.role_Name AS roleName,
+             r.role_Code AS roleCode
+             from menu_table m
+             LEFT JOIN role_menu rm on m.menu_Uuid=rm.menu_Uuid
+             LEFT JOIN role_table r on rm.role_Uuid=r.role_Uuid
+             where m.pre_Menu_Uuid !=null or m.pre_Menu_Uuid!=''
+                <<and r.role_Uuid=:roleUuid>>
+
+           ]]>
+
+     </sql>  
+ </SqlQueryEntity>
+ 

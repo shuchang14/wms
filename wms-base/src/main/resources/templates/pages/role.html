@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>角色管理</title>
+    <link rel="stylesheet" href="./layui/css/layui.css"  media="all">
+    <script type="text/javascript" src="./layui/layui.js"></script>
+    <style>
+
+    </style>
+</head>
+<body>
+   <div class="layui-container" style="width: 100%;margin-top: 10px;">
+        <div class="layui-row query-input">
+            <form class="layui-form" id="query_form">
+            <div class="layui-form-item">
+                <div class="layui-inline" style="width: 250px;">
+                    <label class="layui-form-label">角色代码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="roleCode" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline" style="width: 250px;">
+                    <label class="layui-form-label">角色名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="roleName" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline" style="width: 250px;">
+                    <label class="layui-form-label">创建时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" name="queryDate" id="queryDate">
+                    </div>
+                </div>
+                <div class="layui-inline" style="width: 250px;">
+                    <button class="layui-btn layui-btn-sm" lay-submit lay-filter="queryRole">查询</button>
+                    <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">重置</button>
+                </div>
+            </div>
+            </form>
+        </div>
+        <div class="layui-row">
+             <table class="layui-hide" id="roleTable" lay-filter="roleTable"></table>
+        </div>
+   </div>
+   <form class="layui-form" id="addForm" lay-filter="addForm" style="display: none">
+       <br>
+       <div class="layui-form-item">
+           <div class="layui-inline">
+               <input type="hidden" name="roleUuid">
+               <label class="layui-form-label">角色代码</label>
+               <div class="layui-input-block" style="width: 240px;">
+                   <input type="text" name="roleCode" placeholder="请输入" autocomplete="off" class="layui-input">
+               </div>
+           </div>
+           <div class="layui-inline">
+               <label class="layui-form-label">角色名称</label>
+               <div class="layui-input-block" style="width: 240px;">
+                   <input type="text" name="roleName" placeholder="请输入" autocomplete="off" class="layui-input">
+               </div>
+           </div>
+       </div>
+       <div class="layui-form-item">
+           <div class="layui-input-block">
+               <button class="layui-btn" lay-submit lay-filter="saveRole">保存</button>
+               <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+           </div>
+       </div>
+   </form>
+</body>
+</html>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="addRole">新增</button>
+        <button class="layui-btn layui-btn-sm" lay-event="editRole">编辑</button>
+        <button class="layui-btn layui-btn-sm" lay-event="deleteRole">删除</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+    </div>
+</script>
+
+<script>
+    layui.config({
+        base: './js/'
+        ,version: '101100'
+    }).extend({ //设定模块别名
+        common: 'common'
+    });
+    layui.use(['table','form','jquery','laydate','common'], function(){
+        var table = layui.table;
+        var form = layui.form;
+        var common=layui.common;
+        var $ = layui.jquery;
+
+        var addOpenIndex=null;
+        var roleTable = table.render({
+            elem: '#roleTable'
+            ,url:'/wms/role/roleList/'
+            ,toolbar:'#toolbarDemo'
+            ,page:true
+            ,cols: [
+                [
+                {type: 'checkbox', fixed: 'left'}
+                ,{field: 'roleCode', title: 'roleCode', width:150}
+                ,{field: 'roleName', title: 'roleName', width:150,sort: true}
+                ,{field: 'grade', title: 'grade',width:100}
+                ,{field: 'status', title: 'status',width: 80}
+                ,{field: 'createTime', title: 'createTime', sort: true}
+                ]
+            ]
+        });
+        //头工具栏事件
+        table.on('toolbar(roleTable)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'addRole':
+                    document.getElementById("addForm").reset();
+                    addOpenIndex =layer.open({
+                        type: 1,
+                        title:'新增',
+                        area: ['60%', '400px'],
+                        shadeClose:true,
+                        content: $('#addForm') //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+                    });
+                    break;
+                case 'editRole':
+                    // var data = checkStatus.data;
+                    // layer.alert(JSON.stringify(data));
+                    var data = checkStatus.data;
+                    if(data.length==1) {
+                        form.val("addForm", data[0]);
+                        addOpenIndex = layer.open({
+                            type: 1,
+                            title: '新增',
+                            area: ['60%', '400px'],
+                            shadeClose: true,
+                            content: $('#addForm') //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+                        });
+                    }else{
+                        layer.alert("请选择一条数据进行编辑！");
+                    }
+                    break;
+                case 'deleteRole':
+                   // if()
+                    var data = checkStatus.data;
+                    if(data.length>0){
+                        var ids=new Array();
+                        $.each(data,function(index,obj){
+                            ids.push(obj.roleUuid);
+                        });
+                       /* $.post('/wms/menu/delete',{menuUuids:JSON.stringify(ids)},function (data) {
+
+                        });*/
+                        $.ajax({
+                            //请求方式
+                            type:'POST',
+                            //发送请求的地址
+                            url:'/wms/role/delete',
+                            //服务器返回的数据类型
+                            dataType:'json',
+                            //发送到服务器的数据，对象必须为key/value的格式，jquery会自动转换为字符串格式
+                            data:{roleUuids:JSON.stringify(ids)},
+                            success:function(data){
+                                //请求成功函数内容
+                                form.on('submit(queryRole)', function(data){
+                                    console.log(data);
+                                    roleTable.reload({
+                                        where: {condition:JSON.stringify(data.field)}
+                                        ,page: {
+                                            curr: 1 //重新从第 1 页开始
+                                        }
+                                    });
+                                    return false;
+                                });
+                            },
+                            error:function(jqXHR){
+                                //请求失败函数内容
+                            }
+                        });
+                    }
+                    break;
+                case 'isAll':
+                    var d = new Object();
+                    var t = $('#query_form').serializeArray()[0];
+                    alert(JSON.stringify(t));
+                    $.each(t, function() {
+                        d[this.name] = this.value;
+                    });
+                    alert(JSON.stringify(d));
+                  //  layer.msg(checkStatus.isAll ? '全选': '未全选');
+                    break;
+            };
+        });
+        form.on('submit(saveRole)', function(data){
+            console.log(data);
+            $.ajax({
+                //请求方式
+                type:'POST',
+                //发送请求的地址
+                url:'/wms/role/save',
+                //服务器返回的数据类型
+                dataType:'json',
+                //发送到服务器的数据，对象必须为key/value的格式，jquery会自动转换为字符串格式
+                data:{role:JSON.stringify(data.field)},
+                success:function(data){
+                    //请求成功函数内容
+                },
+                error:function(jqXHR){
+                    //请求失败函数内容
+                }
+            });
+            layer.close(addOpenIndex);
+            layer.msg('保存成功');
+            var queryform = common.formData('#query_form');
+            console.log(queryform);
+            roleTable.reload({
+                where: {condition:JSON.stringify(queryform)}
+                ,page: {
+                    curr: roleTable.config.page.curr //重新从第 1 页开始
+                }
+            });
+            return false;
+        });
+        form.on('submit(queryRole)', function(data){
+            console.log(data);
+            roleTable.reload({
+                where: {condition:JSON.stringify(data.field)}
+                ,page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+            return false;
+        });
+    });
+</script>
