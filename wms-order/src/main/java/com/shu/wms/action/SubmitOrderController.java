@@ -1,6 +1,7 @@
 package com.shu.wms.action;
 
 import com.shu.wms.entity.BaseCondition;
+import com.shu.wms.feign.BaseFeign;
 import com.shu.wms.model.SubmitOrderModel;
 import com.shu.wms.service.SubmitOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("submitOrder")
 public class SubmitOrderController {
 
+    @Autowired
+    private BaseFeign baseFeign;
     @Autowired
     private SubmitOrderService submitOrderService;
     @RequestMapping("saveSubmitOrder")
@@ -27,7 +30,9 @@ public class SubmitOrderController {
     }
     @RequestMapping("test")
     public String test(){
-        SubmitOrderModel so = submitOrderService.find(SubmitOrderModel.class,"");
+        submitOrderService.baseTest();
+        String s = baseFeign.test();
+       // SubmitOrderModel so = submitOrderService.find(SubmitOrderModel.class,"");
         return "test";
     }
 

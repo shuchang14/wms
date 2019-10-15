@@ -9,17 +9,16 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>wms-base</artifactId>
+    <artifactId>wms-eureka</artifactId>
     <dependencies>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <!--添加对code模块的依赖-->
         <dependency>
-            <groupId>com.shu</groupId>
-            <artifactId>wms-code</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
         </dependency>
     </dependencies>
+
 </project>

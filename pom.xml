@@ -6,6 +6,7 @@
     <properties>
         <!--配置属性值-->
         <java.version>1.8</java.version>
+        <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
         <version>1.0-SNAPSHOT</version><!--全局配置项目版本号-->
     </properties>
     <groupId>com.shu</groupId>
@@ -16,6 +17,7 @@
         <module>wms-code</module>
         <module>wms-base</module>
         <module>wms-order</module>
+        <module>wms-eureka</module>
     </modules>
     <parent><!--根模块继承springboot 让所有的子模块都继承springboot-->
         <groupId>org.springframework.boot</groupId>
@@ -23,6 +25,24 @@
         <version>2.1.5.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+    </dependencies>
     <!--版本控制-->
     <dependencyManagement>
         <dependencies>
@@ -35,6 +55,13 @@
                 <groupId>com.shu</groupId>
                 <artifactId>wms-base</artifactId>
                 <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

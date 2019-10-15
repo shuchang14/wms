@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="wmsbase" />
         <module name="wmscode" />
+        <module name="wmseureka" />
         <module name="wmsorder" />
       </profile>
     </annotationProcessing>

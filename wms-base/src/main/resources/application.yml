@@ -43,9 +43,13 @@ spring:
   cache:
     ehcache:
       config: ehcache.xml
- # application:
-  #  name: wms-base
-#eureka:
- # client:
- #   service-url:
- #     defaultZone: http://localhost:8081/eureka
+  application:
+    name: wms-base
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8081/eureka
+    ##是否需要将自己注册到自己的注册中心（集群时需要设为true）
+    register-with-eureka: true
+        ##是否需要检索服务信息
+    fetch-registry: true
