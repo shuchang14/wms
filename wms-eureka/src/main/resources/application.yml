@@ -1,14 +1,19 @@
 server:
   port: 8081
+spring:
+  application:
+    name: eureka-server
 eureka:
   instance:
     ##注册中心地址
     hostname: 127.0.0.1
   client:
-    service-url:
+    serviceUrl:
       ##注册地址
-      defaulZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      defaultZone: http://${eureka.instance.hostname}:8081/eureka/
+    ##http://${eureka.instance.hostname}:${server.port}/eureka/
     ##是否需要将自己注册到自己的注册中心（集群时需要设为true）
     register-with-eureka: false
     ##是否需要检索服务信息
     fetch-registry: false
+

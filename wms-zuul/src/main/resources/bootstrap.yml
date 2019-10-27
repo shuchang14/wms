@@ -1,0 +1,41 @@
+server:
+  port: 8086
+#开启所有监控中心接口
+management:
+  endpoint:
+    web:
+      exposure:
+        include: "*"
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8081/eureka
+    ##注册到eureka
+    register-with-eureka: true
+        ##是否需要检索服务信息
+    fetch-registry: true
+spring:
+  application:
+    name: wms-zuul
+  cloud:
+    config:
+      profile: sit
+      discovery:
+        service-id: wms-config
+        enabled: true
+      label: master
+
+#zuul:
+#  routes:
+#    wms-base:
+#      path: /base/**
+#      url: wms-base
+#    wms-order:
+#      path: /order/**
+#      url: wms-order
+#ribbon: #配置超时时间
+#  ReadTimeout: 5000
+#  SocketTimeout: 5000
+
+
+

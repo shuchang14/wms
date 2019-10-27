@@ -7,6 +7,7 @@ import com.shu.wms.entity.UserQueryCondition;
 import com.shu.wms.model.UserModel;
 import com.shu.wms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,8 @@ import java.util.Map;
 @RequestMapping("user")
 public class UserController {
 
+  //  @Value("${baseName}")
+    private String baseName;
     @Autowired
     private UserService userService;
     @GetMapping("test")
@@ -24,8 +27,8 @@ public class UserController {
         UserEntity entity=new UserEntity();
         entity.setGrade(1);
        // userService.saveOffice(null);
-        userService.getUser("");
-        return "aaaaaa";
+        //userService.getUser("");
+        return "成功！";
     }
     @PostMapping("save")
     public UserModel save(@RequestBody Map<String,String> map){

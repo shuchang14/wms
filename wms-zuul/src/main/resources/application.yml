@@ -1,0 +1,14 @@
+#zuul:
+#  routes:
+#    wms-base:
+#      path: /base/**
+#      url: wms-base
+#    wms-order:
+#      path: /order/**
+#      url: wms-order
+#ribbon: #配置超时时间
+#  ReadTimeout: 5000
+#  SocketTimeout: 5000
+
+
+

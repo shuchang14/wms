@@ -1,0 +1,26 @@
+server:
+  port: 8089
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8081/eureka
+    ##是否需要将自己注册到注册中心
+    register-with-eureka: true
+    ##是否需要检索服务信息
+    fetch-registry: true
+spring:
+  application:
+    name: wms-config
+  cloud:
+    config:
+      label: master
+      server:
+        git:
+          uri: https://gitee.com/shuchang14/wms-config.git
+          #搜索配置文件目录
+          search-paths:
+          - wms-config
+          username: shuchang14
+          password: shu911114
+        native:
+          search-locations: file:///G:/config

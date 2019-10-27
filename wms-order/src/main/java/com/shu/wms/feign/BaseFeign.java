@@ -3,7 +3,7 @@ package com.shu.wms.feign;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@FeignClient("wms-base")
+@FeignClient(value="wms-base",fallbackFactory=BaseHystrixClientFallbackFactory.class)
 public interface BaseFeign {
 
     @RequestMapping("/user/test")

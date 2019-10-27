@@ -6,7 +6,7 @@
     <properties>
         <!--配置属性值-->
         <java.version>1.8</java.version>
-        <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
+        <spring-cloud.version>Greenwich.SR3</spring-cloud.version>
         <version>1.0-SNAPSHOT</version><!--全局配置项目版本号-->
     </properties>
     <groupId>com.shu</groupId>
@@ -18,6 +18,8 @@
         <module>wms-base</module>
         <module>wms-order</module>
         <module>wms-eureka</module>
+        <module>wms-config</module>
+        <module>wms-zuul</module>
     </modules>
     <parent><!--根模块继承springboot 让所有的子模块都继承springboot-->
         <groupId>org.springframework.boot</groupId>
@@ -35,10 +37,6 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
@@ -54,6 +52,16 @@
             <dependency>
                 <groupId>com.shu</groupId>
                 <artifactId>wms-base</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.shu</groupId>
+                <artifactId>wms-config</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.shu</groupId>
+                <artifactId>wms-zuul</artifactId>
                 <version>${version}</version>
             </dependency>
             <dependency>

@@ -30,10 +30,10 @@ public class SubmitOrderController {
     }
     @RequestMapping("test")
     public String test(){
-        submitOrderService.baseTest();
-        String s = baseFeign.test();
+        //submitOrderService.baseTest();  //RestTemplate 调用远程服务
+       // String s = baseFeign.test();      //feign 调用远程服务
        // SubmitOrderModel so = submitOrderService.find(SubmitOrderModel.class,"");
-        return "test";
+        return "ssdd";
     }
 
 }

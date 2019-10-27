@@ -1,55 +1,61 @@
 server:
-  port: 8086
+  port: 8089
 logging:
   file: mylog.log
 spring:
+  application:
+    name: wms-base
+  cache:
+    ehcache:
+      config: ehcache.xml
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/wms?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Hongkong
-    username: root
     password: 123456
-    type: com.alibaba.druid.pool.DruidDataSource
     tomcat:
-      max-active: 20
       initial-size: 2
+      max-active: 20
       max-wait: 60000
-      min-idle: 1
-      time-between-eviction-runs-millis: 60000
       min-evictable-idle-time-millis: 300000
-      validation-query: select 'x'
-      test-while-idle: true
+      min-idle: 1
       test-on-borrow: false
       test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      validation-query: select 'x'
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/wms?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Hongkong
+    username: root
   jpa:
     database: mysql
-    show-sql: true
     hibernate:
       ddl-auto: update
       naming:
         strategy: org.hibernate.cfg.ImprovedNamingStrategy
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
-        format_sql: true
-        show_sql: true
-        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
-        generate_statistics: true
         cache:
-          use_second_level_cache: true
-          use_query_cache: true
           provider_configuration_file_resource_path: classpath:ehcache.xml
           region:
             factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
-  cache:
-    ehcache:
-      config: ehcache.xml
-  application:
-    name: wms-base
+          use_query_cache: true
+          use_second_level_cache: true
+        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: true
+        generate_statistics: true
+        show_sql: true
+    show-sql: true
 eureka:
   client:
     service-url:
-      defaultZone: http://127.0.0.1:8081/eureka
+      defaultZone: http://127.0.0.1:8081/eureka,http://127.0.0.1:8082/eureka
     ##是否需要将自己注册到自己的注册中心（集群时需要设为true）
     register-with-eureka: true
         ##是否需要检索服务信息
     fetch-registry: true
+    healthcheck:
+        enabled: true
+  instance:
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+
