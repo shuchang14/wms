@@ -1,14 +1,12 @@
 package com.shu.wms.service.impl;
 
-import com.shu.wms.entity.BaseQuery;
-import com.shu.wms.entity.Condition;
-import com.shu.wms.entity.DataGridEntity;
-import com.shu.wms.entity.PageEntity;
+import com.shu.wms.entity.*;
 import com.shu.wms.model.BaseModel;
 import com.shu.wms.model.UserModel;
 import com.shu.wms.model.UserRoleModel;
 import com.shu.wms.query.RoleMenuQueryCondition;
 import com.shu.wms.query.RoleMenuQueryItem;
+import com.shu.wms.query.UserRoleQueryItem;
 import com.shu.wms.service.MenuService;
 import com.shu.wms.service.UserService;
 import com.shu.wms.util.RcUtil;
@@ -133,10 +131,11 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
 	}
 
 	@Override
-	public DataGridEntity queryUser(RoleMenuQueryCondition condition) {
+	public DataGridEntity queryUser(UserQueryCondition condition) {
+		//List<UserModel> userList = this.createNativeQuery("",UserModel.class).setFirstResult(1).setMaxResults(10).getResultList();
 		//return this.query(UserRoleQueryItem.class,condition,pageEntity);
 		BaseQuery query = this.createBaseQuery(UserModel.class);
-		/*if(!RcUtil.isNull(condition.getUserCode()))
+		if(!RcUtil.isNull(condition.getUserCode()))
 			query.addCondition(Condition.eq("user_code",condition.getUserCode()));
 		if(!RcUtil.isNull(condition.getUserName()))
 			query.addCondition(Condition.eq("user_name",condition.getUserName()));
@@ -144,8 +143,8 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
 			String startTime=condition.getTwoTime()[0];
 			String endTime=RcUtil.addDate(condition.getTwoTime()[1],1);
 			query.addCondition(Condition.between("create_time",startTime,endTime));
-		}*/
-		return null;// query.list(new PageEntity(condition.getCurrentPage(),condition.getPageSize()));
+		}
+		return query.list(new PageEntity(condition.getCurrentPage(),condition.getPageSize()));
 	}
 
 

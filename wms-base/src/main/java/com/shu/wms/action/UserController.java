@@ -50,7 +50,7 @@ public class UserController {
     }
     @PostMapping("userList")
     public DataGridEntity userList(@RequestBody UserQueryCondition condition){
-        //DataGridEntity entity=userService.queryUser(condition);
-        return null;//entity;
+        DataGridEntity entity=userService.queryUser(condition);
+        return entity;
     }
 }
